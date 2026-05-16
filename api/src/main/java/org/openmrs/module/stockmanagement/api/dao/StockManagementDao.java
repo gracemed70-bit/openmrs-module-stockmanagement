@@ -725,6 +725,25 @@ public class StockManagementDao extends DaoBase {
             parameterList.putIfAbsent("locationId", filter.getLocationId());
         }
 
+        if (filter.getAtLocationId() != null) {
+            if (filter.getChildLocations() != null && filter.getChildLocations()) {
+                List<Integer> locationIds = getCompleteLocationTree(filter.getAtLocationId()).stream().map(p -> p.getChildLocationId()).collect(Collectors.toList());
+                if (locationIds.isEmpty()) {
+                    locationIds.add(filter.getAtLocationId());
+                }
+                if (locationIds.size() == 1) {
+                    appendFilter(hqlFilter, "so.atLocation.locationId = :atLocationId");
+                    parameterList.putIfAbsent("atLocationId", locationIds.get(0));
+                } else {
+                    appendFilter(hqlFilter, "so.atLocation.locationId in (:atLocationIds)");
+                    parameterWithList.putIfAbsent("atLocationIds", locationIds);
+                }
+            } else {
+                appendFilter(hqlFilter, "so.atLocation.locationId = :atLocationId");
+                parameterList.putIfAbsent("atLocationId", filter.getAtLocationId());
+            }
+        }
+
         if (filter.getPartyId() != null) {
             appendFilter(hqlFilter, "(so.source.id = :partyId OR so.destination.id = :partyId )");
             parameterList.putIfAbsent("partyId", filter.getPartyId());
