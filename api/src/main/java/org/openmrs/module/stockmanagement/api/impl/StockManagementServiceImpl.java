@@ -3094,7 +3094,15 @@ public class StockManagementServiceImpl extends BaseOpenmrsService implements St
             batchJob.setExpiration(DateUtils.addMinutes(new Date(), GlobalProperties.getBatchJobExpiryInMinutes()));
             batchJob.setParameters(batchJobDTO.getParameters());
             batchJob.setPrivilegeScope(batchJobDTO.getPrivilegeScope());
-
+        if (locationScope != null) {  
+           batchJob.setLocationScope(locationScope);  
+        } else {  
+          // Fallback to user's session location  
+           Location sessionLocation = Context.getUserContext().getLocation();  
+           if (sessionLocation != null) {  
+               batchJob.setLocationScope(sessionLocation);  
+            }  
+         }
             if (locationScope != null) {
                 batchJob.setLocationScope(locationScope);
             }
