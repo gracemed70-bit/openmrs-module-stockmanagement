@@ -1,30 +1,32 @@
-name: Build OpenMRS Module
+name: Build Backend Module
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ main ]   # Runs automatically when you push to main
+  pull_request:          # Runs when a PR is opened
+  workflow_dispatch:     # Allows manual trigger from Actions tab
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # ✅ Opt into Node.js 24 now
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
-          java-version: '11'
-          distribution: 'temurin'
+          distribution: 'temurin'   # OpenJDK distribution
+          java-version: '11'        # Match OpenMRS requirements
 
       - name: Build with Maven
-        run: mvn clean install
+        run: mvn clean install -DskipTests
 
-      - name: Upload .omod artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload omod file
+        uses: actions/upload-artifact@v4
         with:
-          name: omod-file
-          path: omod/target/*.omod
+          name: omod
+          path: target/*.omod
