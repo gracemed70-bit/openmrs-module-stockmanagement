@@ -15,6 +15,10 @@ public class StockOperationSearchFilter {
 	
 	private Integer locationId;
 	
+	private Integer atLocationId;
+	
+	private Boolean childLocations;
+	
 	private Integer partyId;
 	
 	private Integer stockSourceId;
@@ -101,6 +105,22 @@ public class StockOperationSearchFilter {
 	
 	public void setLocationId(Integer locationId) {
 		this.locationId = locationId;
+	}
+	
+	public Integer getAtLocationId() {
+		return atLocationId;
+	}
+	
+	public void setAtLocationId(Integer atLocationId) {
+		this.atLocationId = atLocationId;
+	}
+	
+	public Boolean getChildLocations() {
+		return childLocations;
+	}
+	
+	public void setChildLocations(Boolean childLocations) {
+		this.childLocations = childLocations;
 	}
 	
 	public Integer getStockItemId() {
